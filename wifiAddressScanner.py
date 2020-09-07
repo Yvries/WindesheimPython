@@ -5,6 +5,7 @@ import os
 from sense_hat import SenseHat
 
 macAdresses = []
+networkAdress = "192.168.1.{0}"
 red = (255, 0, 0)
 green = (0, 255, 0)
 
@@ -27,7 +28,7 @@ def searchMac():
 def scanNetwork():
     with open(os.devnull, "wb") as limbo:
         for n in range(1, 255):
-                ip="192.168.1.{0}".format(n)
+                ip=networkAdress.format(n)
                 result=subprocess.Popen(["ping", "-c", "1", "-n", "-W", "2", ip],
                         stdout=limbo, stderr=limbo).wait()
                 if result:
@@ -35,6 +36,6 @@ def scanNetwork():
                 else:
                         print (ip, "active")
 #use this if you can't find your mac address
-#scanNetwork()
+scanNetwork()
 searchMac()
 
