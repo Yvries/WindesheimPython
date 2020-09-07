@@ -1,11 +1,10 @@
 from subprocess import Popen, PIPE
-from subprocess import Popen, PIPE
 import subprocess
 import re
 import os
 from sense_hat import SenseHat
 
-macAdresses = ["98:09:cf:8c:e9:d9","60:45:cb:86:23:73"]
+macAdresses = []
 red = (255, 0, 0)
 green = (0, 255, 0)
 
