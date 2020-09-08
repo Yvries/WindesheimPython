@@ -4,6 +4,13 @@ import re
 import os
 from sense_hat import SenseHat
 
+macRegex = re.compile(r"(?:[0-9a-fA-F]:?){12}")
+ipAddressRegex = re.compile(r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b")
+test = os.popen("ip addr show eth0")
+for t in test:
+	rat = re.findall(ipAddressRegex,t)
+	if len(rat) > 1:
+		print(rat[0])
 macAdresses = ["98:09:cf:8c:e9:d9", "60:45:cb:86:23:73"]
 networkAdress = "192.168.1.{0}"
 
@@ -12,12 +19,10 @@ red = (255, 0, 0)
 green = (0, 255, 0)
 
 sh = SenseHat()
-#Searches in arp cache file for certain macaddresses 
+#Searches in arp cache file for certain macaddresses
 def searchIpWithMac():
     pids = os.popen("arp -a")
     for pid in pids:
-        macRegex = re.compile(r"(?:[0-9a-fA-F]:?){12}")
-        ipAddressRegex = re.compile(r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b")
         deviceName = pid.split()[0]
         mac = re.findall(macRegex,pid)
         ipAddress = re.findall(ipAddressRegex,pid)
@@ -26,7 +31,7 @@ def searchIpWithMac():
             #print(deviceName, mac, ipAddress)
             addresses.append(ipAddress[0])
             sh.clear(green)
-       
+
 #scans the network and add found devices to the arp cache file
 def scanNetwork():
     with open(os.devnull, "wb") as limbo:
@@ -49,12 +54,11 @@ def checkIfIpStillOnline():
         elif res == 2:
             print("no response from", adres)
             scanNetwork()
-        else: 
+        else:
             print("ping to", adres, "failed!")
             scanNetwork()
             sh.clear(red)
 #scanNetwork()
-searchIpWithMac()
-checkIfIpStillOnline()
 
-
+#searchIpWithMac()
+#checkIfIpStillOnline()
