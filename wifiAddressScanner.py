@@ -4,8 +4,23 @@ import re
 import os
 from sense_hat import SenseHat
 
+oldstr = "192.168.137.117" #<-ip hier
+
+#bepaalt lengte laatste stuk
+iplist = oldstr.split(".")
+lastbit = len(iplist[3])
+
+#delete laatste stuk
+i = 0
+while i < lastbit:
+    midlen = len(oldstr)-1   # //2 in python 3
+    oldstr = oldstr[:midlen] + oldstr[midlen+1:]
+    i = i + 1
+iptest = oldstr
+
+
 macAdresses = ["98:09:cf:8c:e9:d9", "60:45:cb:86:23:73"]
-networkAdress = "192.168.1.{0}"
+networkAdress = iptest + "{0}"
 
 addresses = []
 red = (255, 0, 0)
@@ -53,8 +68,6 @@ def checkIfIpStillOnline():
             print("ping to", adres, "failed!")
             scanNetwork()
             sh.clear(red)
-#scanNetwork()
+scanNetwork()
 searchIpWithMac()
 checkIfIpStillOnline()
-
-
