@@ -1,13 +1,19 @@
 import functions
 import generateIp
+import time
+import multiprocessing
+from functools import partial
 
 macAdresses = generateIp.getMacAdresses()
-print(macAdresses)
 networkAdress = generateIp.generateIP()
+
+isConnectedwithWifi = True
 
 functions.scanNetwork(networkAdress)
 
-functions.searchIpWithMac(macAdresses)
-
-while True:
-    functions.checkIfIpStillOnline()
+# functions.searchIpWithMac(macAdresses)
+#
+# while True:
+#     functions.scanNetwork()
+#     functions.checkIfIpStillOnline()
+#     time.sleep(30)
