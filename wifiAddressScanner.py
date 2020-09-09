@@ -4,8 +4,39 @@ import re
 import os
 from sense_hat import SenseHat
 
+ipAddressRegex = re.compile(r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b")
+
+def generateDefaultIP(ip):
+    #count lenght of last array
+    ipList = ip.split(".")
+    ipListLenght = len(ipList) -1 #most of the time the lenght is 3 -- minus one because len doesnt count from 0
+
+    #remove the string from list
+    ipList.remove(ipList[ipListLenght])
+
+    #add the "format" string to list
+    ipList.append("{0}")
+
+    #join the list with dots
+    generatedIp = ".".join(ipList)
+
+    return generatedIp
+
+def getNetworkAddres():
+    if isConnectedwithWifi:
+        ips = os.popen("ip addr show wlan")
+    else:
+        ips = os.popen("ip addr show eth0")
+    for ip in ips:
+        find = re.findall(ipAddressRegex,ip)
+        if len(find) > 1:
+            return(find[0])
+
+isConnectedwithWifi = False
 macAdresses = ["98:09:cf:8c:e9:d9", "60:45:cb:86:23:73"]
-networkAdress = "192.168.1.{0}"
+
+networkAdress = generateDefaultIP(getNetworkAddres())
+print(networkAdress)
 
 addresses = []
 red = (255, 0, 0)
@@ -17,7 +48,6 @@ def searchIpWithMac():
     pids = os.popen("arp -a")
     for pid in pids:
         macRegex = re.compile(r"(?:[0-9a-fA-F]:?){12}")
-        ipAddressRegex = re.compile(r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b")
         deviceName = pid.split()[0]
         mac = re.findall(macRegex,pid)
         ipAddress = re.findall(ipAddressRegex,pid)
@@ -54,25 +84,7 @@ def checkIfIpStillOnline():
             scanNetwork()
             sh.clear(red)
 
-def generateDefaultIP(ip):
-    #count lenght of last array
-    ipList = ip.split(".")
-    ipListLenght = len(ipList) -1 #most of the time the lenght is 3 -- minus one because len doesnt count from 0
-
-    #remove the string from list
-    ipList.remove(ipList[ipListLenght])
-
-    #add the "format" string to list
-    ipList.append("{0}")
-
-    #join the list with dots
-    generatedIp = ".".join(ipList)
-
-    return generatedIp
-    
-print(generateDefaultIP("192.168.1.543"))
-
-#scanNetwork()
+scanNetwork()
 #searchIpWithMac()
 #checkIfIpStillOnline()
 
