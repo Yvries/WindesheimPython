@@ -53,8 +53,27 @@ def checkIfIpStillOnline():
             print("ping to", adres, "failed!")
             scanNetwork()
             sh.clear(red)
+
+def generateDefaultIP(ip):
+    #count lenght of last array
+    ipList = ip.split(".")
+    ipListLenght = len(ipList) -1 #most of the time the lenght is 3 -- minus one because len doesnt count from 0
+
+    #remove the string from list
+    ipList.remove(ipList[ipListLenght])
+
+    #add the "format" string to list
+    ipList.append("{0}")
+
+    #join the list with dots
+    generatedIp = ".".join(ipList)
+
+    return generatedIp
+    
+print(generateDefaultIP("192.168.1.543"))
+
 #scanNetwork()
-searchIpWithMac()
-checkIfIpStillOnline()
+#searchIpWithMac()
+#checkIfIpStillOnline()
 
 
