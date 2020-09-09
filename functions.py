@@ -54,15 +54,23 @@ def searchIpWithMac(macAdresses):
 
 #scans the network and add found devices to the arp cache file
 def scanNetwork(networkAdress):
-    with open(os.devnull, "wb") as limbo:
-        for n in range(1, 255):
-                ip=networkAdress.format(n)
-                result=subprocess.Popen(["ping", "-c", "1", "-n", "-W", "2", ip],
-                        stdout=limbo, stderr=limbo).wait()
-                if result:
-                        print(ip, "inactive")
-                else:
-                        print (ip, "active")
+   tries = 0
+   with open(os.devnull, "wb") as limbo:
+       for n in range(1, 255):
+           ip=networkAdress.format(n)
+           result=subprocess.Popen(["ping", "-c", "1", "-w", "1", ip],
+           stdout=limbo, stderr=limbo).wait()
+           if result:
+               tries +=1
+               print(tries)
+               print(ip, "inactive")
+               if tries > 10:
+                   print(tries)
+                   break
+           else:
+               print (ip, "active")
+               tries = 0
+
 
 def checkIfIpStillOnline():
     print(addresses)
