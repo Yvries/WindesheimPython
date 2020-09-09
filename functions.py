@@ -5,6 +5,7 @@ import os
 from sense_hat import SenseHat
 import multiprocessing
 
+
 macRegex = re.compile(r"(?:[0-9a-fA-F]:?){12}")
 ipAddressRegex = re.compile(r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b")
 
@@ -14,31 +15,6 @@ green = (0, 255, 0)
 
 sh = SenseHat()
 
-def generateDefaultIP(ip):
-    #count lenght of last array
-    ipList = ip.split(".")
-    ipListLenght = len(ipList) -1 #most of the time the lenght is 3 -- minus one because len doesnt count from 0
-
-    #remove the string from list
-    ipList.remove(ipList[ipListLenght])
-
-    #add the "format" string to list
-    ipList.append("{0}")
-
-    #join the list with dots
-    generatedIp = ".".join(ipList)
-
-    return generatedIp
-
-def getNetworkAddres(isConnectedwithWifi):
-    if isConnectedwithWifi:
-        ips = os.popen("ip addr show wlan0")
-    else:
-        ips = os.popen("ip addr show eth0")
-    for ip in ips:
-        find = re.findall(ipAddressRegex,ip)
-        if len(find) > 1:
-            return(find[0])
 
 #Searches in arp cache file for certain macaddresses
 def searchIpWithMac(macAdresses):
@@ -80,8 +56,8 @@ def checkIfIpStillOnline():
             sh.clear(green)
         elif res == 2:
             print("no response from", adres)
-            scanNetwork()
+            scanNetwork(networkAdress)
         else:
             print("ping to", adres, "failed!")
-            scanNetwork()
+            scanNetwork(networkAdress)
             sh.clear(red)
