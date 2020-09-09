@@ -33,3 +33,7 @@ def getNetworkAddres():
 def generateIP():
     print(getNetworkAddres())
     return generateDefaultIP(getNetworkAddres())
+
+def getMacAdresses():
+    macAddresses = config("macAddresses")
+    return macAddresses.split(",")
