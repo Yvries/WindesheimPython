@@ -24,7 +24,7 @@ def generateDefaultIP(ip):
 
 def getNetworkAddres():
     if isConnectedwithWifi:
-        ips = os.popen("ip addr show wlan")
+        ips = os.popen("ip addr show wlan0")
     else:
         ips = os.popen("ip addr show eth0")
     for ip in ips:
