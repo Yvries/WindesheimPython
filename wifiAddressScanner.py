@@ -6,9 +6,7 @@ networkAdress = functions.generateDefaultIP(functions.getNetworkAddres(isConnect
 
 print(networkAdress)
 
-
 functions.scanNetwork(networkAdress)
-
 
 functions.searchIpWithMac(macAdresses)
 functions.checkIfIpStillOnline()
