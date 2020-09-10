@@ -5,11 +5,15 @@ import os
 from sense_hat import SenseHat
 import multiprocessing
 from functools import partial
+import generateIp
 
 macRegex = re.compile(r"(?:[0-9a-fA-F]:?){12}")
 ipAddressRegex = re.compile(r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b")
+networkAdress = generateIp.generateIP()
 
-activeAdresses = []
+oldActiveAdresses = []
+newActiveAdresses = []
+
 addresses = []
 red = (255, 0, 0)
 green = (0, 255, 0)
@@ -44,14 +48,26 @@ def scanIp(networkAdress,n):
 #scans the network and add found devices to the arp cache file
 def scanNetwork(networkAdress):
         n = range(1, 255)
-        pool = multiprocessing.Pool(50)
+        pool = multiprocessing.Pool(60)
         func = partial(scanIp,networkAdress)
         result = pool.map(func, n)
         pool.close()
         pool.join()
 
         activeAdresses = [i for i in result if i]
-        print(activeAdresses)
+        return activeAdresses
+      
+def rerunScanNetwork():
+    global newActiveAdresses
+    while True:
+       oldActiveAdresses = newActiveAdresses
+       newActiveAdresses = scanNetwork(networkAdress)
+
+       if len(oldActiveAdresses) > len(newActiveAdresses):
+           print("New adresses Disconected")
+       elif len(oldActiveAdresses) < len(newActiveAdresses):
+           print("New adresses Conected")
+       print(newActiveAdresses)
 
 def checkIfIpStillOnline(networkAdress):
     print(addresses)
