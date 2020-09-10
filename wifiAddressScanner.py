@@ -1,4 +1,3 @@
 import functions
 
-# functions.rerunScanNetwork()
-functions.rainbow()
+functions.rerunScanNetwork()
