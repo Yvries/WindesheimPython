@@ -6,9 +6,13 @@ from sense_hat import SenseHat
 import multiprocessing
 from functools import partial
 import generateIp
+import time
+from colorsys import hsv_to_rgb
+from time import sleep
 
 macRegex = re.compile(r"(?:[0-9a-fA-F]:?){12}")
 ipAddressRegex = re.compile(r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b")
+macAdresses = generateIp.getMacAdresses()
 networkAdress = generateIp.generateIP()
 
 oldActiveAdresses = []
@@ -54,20 +58,7 @@ def scanNetwork(networkAdress):
         pool.close()
         pool.join()
 
-        activeAdresses = [i for i in result if i]
-        return activeAdresses
-      
-def rerunScanNetwork():
-    global newActiveAdresses
-    while True:
-       oldActiveAdresses = newActiveAdresses
-       newActiveAdresses = scanNetwork(networkAdress)
-
-       if len(oldActiveAdresses) > len(newActiveAdresses):
-           print("New adresses Disconected")
-       elif len(oldActiveAdresses) < len(newActiveAdresses):
-           print("New adresses Conected")
-       print(newActiveAdresses)
+        return [i for i in result if i]
 
 def checkIfIpStillOnline(networkAdress):
     print(addresses)
@@ -78,8 +69,22 @@ def checkIfIpStillOnline(networkAdress):
             sh.clear(green)
         elif res == 2:
             print("no response from", adres)
-            scanNetwork(networkAdress)
         else:
             print("ping to", adres, "failed!")
-            scanNetwork(networkAdress)
             sh.clear(red)
+
+def rerunScanNetwork():
+    global newActiveAdresses
+    while True:
+
+       oldActiveAdresses = newActiveAdresses
+       newActiveAdresses = scanNetwork(networkAdress)
+
+       if oldActiveAdresses != newActiveAdresses:
+           print("changed")
+           searchIpWithMac(macAdresses)
+       else:
+           print("unchanged")
+           checkIfIpStillOnline(networkAdress)
+
+       time.sleep(30)
