@@ -16,32 +16,6 @@ green = (0, 255, 0)
 
 sh = SenseHat()
 
-def generateDefaultIP(ip):
-    #count lenght of last array
-    ipList = ip.split(".")
-    ipListLenght = len(ipList) -1 #most of the time the lenght is 3 -- minus one because len doesnt count from 0
-
-    #remove the string from list
-    ipList.remove(ipList[ipListLenght])
-
-    #add the "format" string to list
-    ipList.append("{0}")
-
-    #join the list with dots
-    generatedIp = ".".join(ipList)
-
-    return generatedIp
-
-def getNetworkAddres(isConnectedwithWifi):
-    if isConnectedwithWifi:
-        ips = os.popen("ip addr show wlan0")
-    else:
-        ips = os.popen("ip addr show wlan0")
-    for ip in ips:
-        find = re.findall(ipAddressRegex,ip)
-        if len(find) > 1:
-            return(find[0])
-
 #Searches in arp cache file for certain macaddresses
 def searchIpWithMac(macAdresses):
     pids = os.popen("arp -a")
