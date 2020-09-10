@@ -9,7 +9,7 @@ networkAdress = generateIp.generateIP()
 
 isConnectedwithWifi = True
 
-function.rerunscanNetwork()
+functions.rerunScanNetwork()
 
 # functions.searchIpWithMac(macAdresses)
 #
