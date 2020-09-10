@@ -69,8 +69,8 @@ def scanIp(networkAdress,n):
 
 #scans the network and add found devices to the arp cache file
 def scanNetwork(networkAdress):
-        n = range(1, 10)
-        pool = multiprocessing.Pool()
+        n = range(1, 255)
+        pool = multiprocessing.Pool(50)
         func = partial(scanIp,networkAdress)
         result = pool.map(func, n)
         pool.close()
